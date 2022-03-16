@@ -33,9 +33,7 @@ mongoose.connect(uriSting)
   .then(() => {
     log("CONNECTION TO THE DATA_BASE SUCCEED");
 
-    //Post url of websites
     app.use("/api/shorturl/", apiRoutes.apiRouter)
-    //app.post("/api/shorturl/", urlController.siteModel_post_newUrl);
     
   })
   .catch((err)=>log(err));

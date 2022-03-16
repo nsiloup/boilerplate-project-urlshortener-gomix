@@ -32,10 +32,26 @@ let siteModel_post_newUrl = (req, res, next)=>{
     };
 };
 
+let siteModel_get_N_Redirect_longUrl = (req, res, next) =>{
+    try{
+        (async function(){let shortUrl = req.params.shortUrl;
+            log(shortUrl);
+            let resultObj = await SiteModel.find({short_url:shortUrl}, {short_url : 1, original_url : 1,  _id: 0});
+            log("result found", resultObj);
+            let longUrl = resultObj[0].original_url;
+            res.redirect(longUrl);
+        })()
+    }catch(err){
+        log(err);
+        next(err)
+    };
+};
+
 // Delete some sites from the DB to limit storage usage to 4 Documents
 SiteModel.deleteMany({ short_url: { $gte: 4 }}, (err, data)=>err?log("Error Deleting Doc : ", err) : log("Doc Deleted : ", data))
 exports.createAndSaveDoc = createAndSaveDoc;
 
 module.exports = {
     siteModel_post_newUrl,
+    siteModel_get_N_Redirect_longUrl
 };
