@@ -26,13 +26,24 @@ let siteModel_post_newUrl = (req, res, next)=>{
         }else{
             let obj = {}; 
             (async function(){
-                let data1 =await SiteModel.find({},{short_url : 1,  _id: 0});
+
+            let num; // to better organize and manage my DB
+            let data1 = await SiteModel.find({},{short_url : 1,  _id: 0});;
+            if(data1.length === 0 ){
+                num = 1;
+            }else if(data1.length === 1){
+                num = 2
+            }else if(data1.length >= 2){
                 let shortUrlNum = data1.reduce((previous, current)=>{
                     return (previous.short_url > current.short_url ) ? previous: current;
                 });
-                shortUrlNum = shortUrlNum.short_url + 1
-                obj.short_url = shortUrlNum;
-                obj.original_url = url;
+                shortUrlNum = shortUrlNum.short_url + 1;
+                num = shortUrlNum;
+            };
+            obj.short_url = num;
+            obj.original_url = url;
+
+
                 log("object created ",obj);
                 res.json(obj);
                 let data2 = await SiteModel.create(obj);
