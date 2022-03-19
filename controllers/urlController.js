@@ -72,8 +72,8 @@ let siteModel_get_N_Redirect_longUrl = (req, res, next) =>{
     };
 };
 
-// Delete some sites from the DB to limit storage usage to 4 Documents
-SiteModel.deleteMany({ short_url: { $gte: 2 }}, (err, data)=>err?log("Error Deleting Doc : ", err) : log("Doc Deleted : ", data))
+// Delete sites from the DB after each run to limit storage
+SiteModel.deleteMany({ short_url: { $gte: 1 }}, (err, data)=>err?log("Error Deleting Doc : ", err) : log("Doc Deleted : ", data))
 exports.createAndSaveDoc = createAndSaveDoc;
 
 module.exports = {
